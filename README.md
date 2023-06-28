@@ -4,7 +4,7 @@
 
 基于Golang Fiber框架二次封装的框架
 
-框架使用文档 [fiber](https://docs.gofiber.io/)
+框架使用文档 [Doc](https://docs.gofiber.io/)
 
 本项目写法参考[webman](https://www.workerman.net/doc/webman/) [thinkphp](https://www.thinkphp.cn/)
 
@@ -12,17 +12,21 @@
 
 Orm框架使用Gorm [Doc](https://gorm.io/zh_CN/docs/)
 
+Redis文档参考 [Doc](https://redis.uptrace.dev/zh/)
+
+validator验证器文档参考[Doc](https://github.com/go-playground/validator/tree/master)
+
 env配置 删除根目录下 .example 例:.env 即可
 
 ## 使用说明
 
-- 使用 go mod 并安装go依赖包 运行命令 `go mod tidy` 相当于 `composer install`
+- 使用 go mod 并安装go依赖包 运行命令 `go mod tidy` 相当于PHP中的 `composer install`
 
 - 编译 `go build -o gofiber.exe start.go`
 
-## go get 速度慢
+- 运行 `go run .`
 
-由于国内没法安装 go.org/x 包下面的东西，推荐使用 goproxy.cn 或者 goproxy.io
+## 初始化环境
 
 ```shell
 # 如果您使用的 Go 版本是 1.13 - 1.15 需要手动设置GO111MODULE=on, 开启方式如下命令, 如果你的 Go 版本 是 1.16 ~ 最新版 可以忽略以下步骤一

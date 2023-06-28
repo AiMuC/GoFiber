@@ -7,11 +7,13 @@ import (
 	"github.com/aimuc/gofiber/route"
 	"github.com/gofiber/contrib/fiberzap"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/template/django/v3"
 	"go.uber.org/zap"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -21,10 +23,10 @@ func RunSever() {
 }
 
 func initialization() {
-	global.Db = GormMysql()
-	global.Redis = RedisDrive()
-	global.Log = Zap()
-	zap.ReplaceGlobals(global.Log)
+	global.Db = GormMysql()        //初始化Mysql
+	global.Redis = RedisDrive()    //初始化Redis
+	global.Log = Zap()             //初始化Zap
+	zap.ReplaceGlobals(global.Log) // 替换全局记录器
 }
 
 func initServer(addr string) {
@@ -44,7 +46,20 @@ func initServer(addr string) {
 	})
 	server.Use(recover.New(), fiberzap.New(fiberzap.Config{
 		Logger: global.Log,
-	})) //开启全局异常捕获
+	})) //开启全局异常捕获,替换日志组件,
+	max, _ := strconv.Atoi(os.Getenv("SERVER.LIMITER.MAX"))
+	exp, _ := strconv.Atoi(os.Getenv("SERVER.LIMITER.EXP"))
+	server.Use(limiter.New(limiter.Config{
+		Next:       nil,
+		Max:        max,
+		Expiration: time.Duration(exp) * time.Second,
+		KeyGenerator: func(c *fiber.Ctx) string {
+			return c.Get("x-forwarded-for")
+		},
+		LimitReached: func(c *fiber.Ctx) error {
+			return c.Status(429).SendString("429 to many request!")
+		},
+	})) //业务限流(如无需使用直接注释整段即可)
 	server.Static("/", "./public", fiber.Static{ //开启静态目录代理
 		Compress:      true,             //是否开启压缩
 		ByteRange:     true,             //是否启用字节范围请求。

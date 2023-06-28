@@ -8,7 +8,7 @@ import (
 
 type IndexRouter struct{}
 
-func (r *IndexRouter) IndexRouters(server *fiber.App) {
+func (r *IndexRouter) IndexRouters(server fiber.Router) {
 	server.Get("/index", middleware.Test, controller.Controller.IndexController.Index) //HelloWorld (包含Test中间件)
 	server.Get("/json", controller.Controller.IndexController.Json)                    //输出Json
 	server.Get("/view", controller.Controller.IndexController.View)                    //输出模板
