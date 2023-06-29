@@ -36,7 +36,8 @@ func (a *IndexController) MyReq(c *fiber.Ctx) error {
 	if err := c.BodyParser(&req); err != nil {
 		panic("参数绑定失败,请检查输入参数是否正确")
 	}
-	if err := (&validate.IndexValidate{}).AutoValidate(&req); err != nil { //验证
+	if err := (&validate.IndexValidate{}).AutoTransValidate(&req); err != nil { //验证
+		panic(err)
 	}
 	return c.JSON(req)
 }

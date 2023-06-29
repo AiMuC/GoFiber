@@ -2,7 +2,14 @@ package utils
 
 import (
 	"errors"
+	"github.com/aimuc/gofiber/global"
+	"github.com/go-playground/locales/zh"
+	"github.com/go-playground/universal-translator"
+	"github.com/go-playground/validator/v10"
+	zhTranslations "github.com/go-playground/validator/v10/translations/zh"
+	"go.uber.org/zap"
 	"os"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -49,4 +56,21 @@ func Env(name string, value ...any) any {
 		env = localEnv
 	}
 	return env
+}
+
+// ValidatorTrainInit 初始化验证器翻译
+func ValidatorTrainInit(validate *validator.Validate) ut.Translator {
+	uni := ut.New(zh.New())
+	trans, _ := uni.GetTranslator("zh")
+	if err := zhTranslations.RegisterDefaultTranslations(validate, trans); err != nil {
+		global.Log.Error("验证器初始化失败", zap.Error(err))
+	}
+	validate.RegisterTagNameFunc(func(fld reflect.StructField) string { // 增加字段别名
+		name := strings.SplitN(fld.Tag.Get("alias"), ",", 2)[0]
+		if name == "-" {
+			return ""
+		}
+		return name
+	})
+	return trans
 }
