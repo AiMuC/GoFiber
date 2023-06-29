@@ -1,6 +1,6 @@
 # GoFiber
 
-## 介绍
+## 介绍 👋 Welcome
 
 基于Golang Fiber框架二次封装的框架
 
@@ -16,7 +16,8 @@ Redis文档参考 [Doc](https://redis.uptrace.dev/zh/)
 
 validator验证器文档参考[Doc](https://github.com/go-playground/validator/tree/master)
 
-env配置 删除根目录下 .example 例:.env 即可
+环境配置(与thinkphp6使用方法相同) .example.env 修改为 .env
+- 未实现thinkphp中的分组配置分组接口 [xxx] xxx=xxx 
 
 ## 使用说明
 

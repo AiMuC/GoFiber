@@ -3,6 +3,7 @@ package initialize
 import (
 	"fmt"
 	"github.com/aimuc/gofiber/config"
+	"github.com/aimuc/gofiber/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -20,8 +21,8 @@ func GormMysql() *gorm.DB {
 		SkipInitializeWithVersion: true, // // 根据当前 MySQL 版本自动配置
 	}), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   os.Getenv("DB.PREFIX"), // 表名前缀，`User` 的表名应该是 `prefix_users`
-			SingularTable: true,                   // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `prefix_user`
+			TablePrefix:   utils.Env("DB.PREFIX", "fiber_").(string), // 表名前缀，`User` 的表名应该是 `prefix_users`
+			SingularTable: true,                                      // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `prefix_user`
 		},
 		SkipDefaultTransaction: true, // 跳过默认事务
 		Logger: logger.New( // 日志
@@ -37,7 +38,7 @@ func GormMysql() *gorm.DB {
 		panic(fmt.Errorf("链接数据库出现错误:%s", err))
 	}
 	sqlDB, _ := db.DB()
-	sqlDB.SetMaxIdleConns(10)           // SetMaxIdleConn 设置空闲连接池中连接的最大数量
+	sqlDB.SetMaxIdleConns(20)           // SetMaxIdleConn 设置空闲连接池中连接的最大数量
 	sqlDB.SetMaxOpenConns(100)          // SetMaxOpenConn 设置打开数据库连接的最大数量。
 	sqlDB.SetConnMaxLifetime(time.Hour) // SetConnMaxLifetime 设置了连接可复用的最大时间。
 	return db

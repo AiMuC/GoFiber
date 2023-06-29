@@ -3,17 +3,15 @@ package initialize
 import (
 	"context"
 	"fmt"
+	"github.com/aimuc/gofiber/utils"
 	"github.com/redis/go-redis/v9"
-	"os"
-	"strconv"
 )
 
 func RedisDrive() *redis.Client {
-	db, _ := strconv.Atoi(os.Getenv("REDIS.DB"))
 	client := redis.NewClient(&redis.Options{
-		Addr:     os.Getenv("REDIS.ADDR"),
-		Password: os.Getenv("REDIS.PASSWORD"),
-		DB:       db,
+		Addr:     utils.Env("REDIS.ADDR", "127.0.0.1:6379").(string),
+		Password: utils.Env("REDIS.PASSWORD", "").(string),
+		DB:       utils.Env("REDIS.DB", 0).(int),
 	})
 
 	_, err := client.Ping(context.Background()).Result()
