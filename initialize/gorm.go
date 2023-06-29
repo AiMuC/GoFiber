@@ -3,7 +3,7 @@ package initialize
 import (
 	"fmt"
 	"github.com/aimuc/gofiber/config"
-	"github.com/aimuc/gofiber/utils"
+	"github.com/aimuc/gofiber/support"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -21,8 +21,8 @@ func GormMysql() *gorm.DB {
 		SkipInitializeWithVersion: true, // // 根据当前 MySQL 版本自动配置
 	}), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix:   utils.Env("DB.PREFIX", "fiber_").(string), // 表名前缀，`User` 的表名应该是 `prefix_users`
-			SingularTable: true,                                      // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `prefix_user`
+			TablePrefix:   support.Env("DB.PREFIX", "fiber_").(string), // 表名前缀，`User` 的表名应该是 `prefix_users`
+			SingularTable: true,                                        // 使用单数表名，启用该选项，此时，`User` 的表名应该是 `prefix_user`
 		},
 		SkipDefaultTransaction: true, // 跳过默认事务
 		Logger: logger.New( // 日志

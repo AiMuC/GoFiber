@@ -3,7 +3,7 @@ package validate
 import (
 	"errors"
 	"fmt"
-	"github.com/aimuc/gofiber/utils"
+	"github.com/aimuc/gofiber/support"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -38,7 +38,7 @@ func (a *IndexValidate) AutoValidate(req any) error {
 // AutoTransValidate 根据alise中的名称使用中文翻译自动输出
 func (a *IndexValidate) AutoTransValidate(req any) error {
 	validate := validator.New()
-	trans := utils.ValidatorTrainInit(validate)
+	trans := support.ValidatorTrainInit(validate)
 	if err := validate.Struct(req); err != nil {
 		for _, validateErr := range err.(validator.ValidationErrors) {
 			return errors.New(validateErr.Translate(trans))

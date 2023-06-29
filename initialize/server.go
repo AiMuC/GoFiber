@@ -5,7 +5,7 @@ import (
 	"github.com/aimuc/gofiber/app"
 	"github.com/aimuc/gofiber/global"
 	"github.com/aimuc/gofiber/route"
-	"github.com/aimuc/gofiber/utils"
+	"github.com/aimuc/gofiber/support"
 	"github.com/gofiber/contrib/fiberzap"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
@@ -17,7 +17,7 @@ import (
 
 func RunSever() {
 	initialization() //初始化操作(此处配置框架启动前的操作)
-	initServer(utils.Env("SERVER.PORT", ":8787").(string))
+	initServer(support.Env("SERVER.PORT", ":8787").(string))
 }
 
 func initialization() {
@@ -46,8 +46,8 @@ func initServer(addr string) {
 	})) //开启全局异常捕获,替换日志组件,
 	server.Use(limiter.New(limiter.Config{
 		Next:       nil,
-		Max:        utils.Env("SERVER.LIMITER.MAX", 999).(int),
-		Expiration: time.Duration(utils.Env("SERVER.LIMITER.EXP", 1).(int)) * time.Second,
+		Max:        support.Env("SERVER.LIMITER.MAX", 999).(int),
+		Expiration: time.Duration(support.Env("SERVER.LIMITER.EXP", 1).(int)) * time.Second,
 		KeyGenerator: func(c *fiber.Ctx) string {
 			return c.Get("x-forwarded-for")
 		},
