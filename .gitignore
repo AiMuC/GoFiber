@@ -1,4 +1,5 @@
 runtime/*
 public/
+test/*
 .env
 .idea/
