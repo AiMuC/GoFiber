@@ -6,6 +6,7 @@ import (
 	"github.com/aimuc/gofiber/global"
 	"github.com/aimuc/gofiber/route"
 	"github.com/aimuc/gofiber/support"
+	"github.com/bytedance/sonic"
 	"github.com/gofiber/contrib/fiberzap"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
@@ -40,6 +41,8 @@ func initServer(addr string) {
 				"msg":  err.Error(),
 			})
 		},
+		JSONEncoder: sonic.Marshal,
+		JSONDecoder: sonic.Unmarshal,
 	})
 	server.Use(recover.New(), fiberzap.New(fiberzap.Config{
 		Logger: global.Log,
